@@ -51,7 +51,7 @@ def get_acl(path):
 
 def set_acl(path , user , acl_type ):
     command=[   "$acl = Get-Acl \"{}\"".format(path),
-                "$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"Allow\")".format(user , acl_type),
+                "$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"ContainerInherit,ObjectInherit\",\"None\",\"Allow\")".format(user , acl_type),
                 "$acl.SetAccessRule($AccessRule)",
                 "$acl | Set-Acl \"{}\"".format(path)
     
@@ -59,14 +59,14 @@ def set_acl(path , user , acl_type ):
     _cmd= run_multiple(command)
     out, err = _cmd.communicate()
     if _cmd.returncode == 0 :
-        return to_string_form(out)
+        return "Successful !"
     else :
         return to_string_form(out)
 
 
 def remove_acl(path , user , acl_type ):
     command=[   "$acl = Get-Acl \"{}\"".format(path),
-                "$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"Allow\")".format(user , acl_type),
+                "$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"ContainerInherit,ObjectInherit\",\"None\",\"Allow\")".format(user , acl_type),
                 "$acl.RemoveAccessRule($AccessRule)",
                 "$acl | Set-Acl \"{}\"".format(path)
     

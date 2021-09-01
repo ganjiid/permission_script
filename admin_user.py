@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'p2.ui'
+# Form implementation generated from reading ui file 'p1.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from GetAcl import *
+from PyQt5.QtWidgets import QFileDialog
+from scripts import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -22,17 +23,17 @@ class Ui_MainWindow(object):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(640, 480))
         MainWindow.setMaximumSize(QtCore.QSize(640, 480))
-        MainWindow.setWindowTitle("PermissionTools(GetACL)")
+        MainWindow.setWindowTitle("PermissionTools(Administrator)")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.BrowseButton = QtWidgets.QPushButton(self.centralwidget)
-        self.BrowseButton.setGeometry(QtCore.QRect(510, 170, 111, 31))
+        self.BrowseButton.setGeometry(QtCore.QRect(510, 200, 111, 31))
         self.BrowseButton.setObjectName("BrowseButton")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(90, 170, 411, 31))
+        self.lineEdit.setGeometry(QtCore.QRect(140, 200, 361, 31))
         self.lineEdit.setObjectName("lineEdit")
         self.PathLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PathLabel.setGeometry(QtCore.QRect(10, 170, 111, 31))
+        self.PathLabel.setGeometry(QtCore.QRect(10, 200, 111, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -43,7 +44,7 @@ class Ui_MainWindow(object):
         self.PathLabel.setFont(font)
         self.PathLabel.setObjectName("PathLabel")
         self.WelcomeLabel = QtWidgets.QLabel(self.centralwidget)
-        self.WelcomeLabel.setGeometry(QtCore.QRect(0, 20, 631, 41))
+        self.WelcomeLabel.setGeometry(QtCore.QRect(4, 30, 631, 41))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.WelcomeLabel.setFont(font)
@@ -52,6 +53,9 @@ class Ui_MainWindow(object):
         self.PresentedLabel = QtWidgets.QLabel(self.centralwidget)
         self.PresentedLabel.setGeometry(QtCore.QRect(510, 460, 121, 20))
         self.PresentedLabel.setObjectName("PresentedLabel")
+        self.UserComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.UserComboBox.setGeometry(QtCore.QRect(140, 251, 361, 31))
+        self.UserComboBox.setObjectName("UserComboBox")
         self.UserLabel = QtWidgets.QLabel(self.centralwidget)
         self.UserLabel.setGeometry(QtCore.QRect(10, 250, 111, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -63,30 +67,116 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.UserLabel.setFont(font)
         self.UserLabel.setObjectName("UserLabel")
+        self.PermissionComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.PermissionComboBox.setGeometry(QtCore.QRect(140, 301, 361, 31))
+        self.PermissionComboBox.setObjectName("PermissionComboBox")
+        self.PermissionLabel = QtWidgets.QLabel(self.centralwidget)
+        self.PermissionLabel.setGeometry(QtCore.QRect(10, 300, 131, 31))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.PermissionLabel.sizePolicy().hasHeightForWidth())
+        self.PermissionLabel.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.PermissionLabel.setFont(font)
+        self.PermissionLabel.setObjectName("PermissionLabel")
         self.ChangePushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.ChangePushButton.setGeometry(QtCore.QRect(510, 210, 111, 31))
+        self.ChangePushButton.setGeometry(QtCore.QRect(510, 390, 111, 31))
         self.ChangePushButton.setObjectName("ChangePushButton")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(130, 70, 371, 71))
-        self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.label.setObjectName("label")
-        self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(90, 251, 531, 211))
-        self.textBrowser.setObjectName("textBrowser")
+        self.ExplaneTextBrowser = QtWidgets.QTextBrowser(self.centralwidget)
+        self.ExplaneTextBrowser.setGeometry(QtCore.QRect(80, 80, 471, 111))
+        self.ExplaneTextBrowser.setFrameShape(QtWidgets.QFrame.Box)
+        self.ExplaneTextBrowser.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.ExplaneTextBrowser.setObjectName("ExplaneTextBrowser")
+        self.JobComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.JobComboBox.setGeometry(QtCore.QRect(140, 351, 361, 31))
+        self.JobComboBox.setObjectName("JobComboBox")
+        self.JobLabel = QtWidgets.QLabel(self.centralwidget)
+        self.JobLabel.setGeometry(QtCore.QRect(10, 350, 131, 31))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.JobLabel.sizePolicy().hasHeightForWidth())
+        self.JobLabel.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.JobLabel.setFont(font)
+        self.JobLabel.setObjectName("JobLabel")
+        self.ResultTextBrowser = QtWidgets.QTextBrowser(self.centralwidget)
+        self.ResultTextBrowser.setGeometry(QtCore.QRect(140, 391, 361, 81))
+        self.ResultTextBrowser.setObjectName("ResultTextBrowser")
         MainWindow.setCentralWidget(self.centralwidget)
+
+        ###############################################
+        self.BrowseButton.clicked.connect(self.choose_directory)
+        self.ChangePushButton.clicked.connect(self.change)
+        ###############################################
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+    def choose_directory(self):
+        input_dir = QFileDialog.getExistingDirectory(None, 'Select a folder' )
+        self.lineEdit.setText(input_dir)
+
+
+    def change(self):
+        if self.lineEdit.text() != "" :
+            self.handler(self.PermissionComboBox.currentText() , self.UserComboBox.currentText() , self.JobComboBox.currentText())
+        else :
+            self.ResultTextBrowser.setText("Error : Select a Path!")
+
+
+    def handler(self , Permission , User , Job):
+        if Job == "":
+            self.ResultTextBrowser.setText("Error : Select a Job!")
+        elif Job == "Get Permission":
+            self.ResultTextBrowser.setText(get_acl(self.lineEdit.text()))
+        elif Job == "Set Permission":
+            self.ResultTextBrowser.setText(set_acl(self.lineEdit.text() , User , Permission))
+        elif Job == "Remove Permission":
+            self.ResultTextBrowser.setText(remove_acl(self.lineEdit.text() , User , Permission))
+        elif Job == "Purge Permission":
+            self.ResultTextBrowser.setText(purge_acl(self.lineEdit.text() , User))
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
+        self.JobComboBox.addItem("")
+        self.JobComboBox.addItem("Get Permission")
+        self.JobComboBox.addItem("Set Permission")
+        self.JobComboBox.addItem("Remove Permission")
+        self.JobComboBox.addItem("Purge Permission")
+
+        self.PermissionComboBox.addItem("")
+        self.PermissionComboBox.addItem("FullControl")
+        self.PermissionComboBox.addItem("Read")
+        self.PermissionComboBox.addItem("Write")
+        self.PermissionComboBox.addItem("Modify")
+
+        self.UserComboBox.addItem("")
+        users = get_users()
+        for user in users:
+            self.UserComboBox.addItem(user)
+            
+
         self.BrowseButton.setText(_translate("MainWindow", "Browse"))
-        self.PathLabel.setText(_translate("MainWindow", "Path :"))
+        self.PathLabel.setText(_translate("MainWindow", "Path for change:"))
         self.WelcomeLabel.setText(_translate("MainWindow", "Wellcome to Permission Tools!"))
         self.PresentedLabel.setText(_translate("MainWindow", "Presented By Ganjiid"))
-        self.UserLabel.setText(_translate("MainWindow", "Report :"))
-        self.ChangePushButton.setText(_translate("MainWindow", "Change"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p>HeyThere ! </p><p>This is a tool for getting a list of users with access permission</p><p>for a path which you choose . </p></body></html>"))
+        self.UserLabel.setText(_translate("MainWindow", "User:"))
+        self.PermissionLabel.setText(_translate("MainWindow", "Permission:"))
+        self.ChangePushButton.setText(_translate("MainWindow", "Start"))
+        self.ExplaneTextBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Hey There !</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is a powershell script based tool for permission modifiction .</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All you shall do is select the path you want to then select the user for changing then select the permission of the list and finally the job and click the change button.</p></body></html>"))
+        self.JobLabel.setText(_translate("MainWindow", "Job:"))
 
 
 if __name__ == "__main__":
