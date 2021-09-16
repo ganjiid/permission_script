@@ -28,17 +28,18 @@ def to_string_form(input):
 
 
 def get_users ():
-    users_cmd= run("Get-LocalUser | Select name")
+    users_cmd= run("net users /domain")
     if users_cmd.returncode == 0 :
-        users =  to_string_form(users_cmd.stdout).split("\n" ) [3:-3]
-        for i in range(len(users)):
-            users[i]= users[i].strip()
+        output = to_string_form(users_cmd.stdout)
+        output = output [output.find("User accounts") : output.find("The command")] 
+        output = output.split("\n",3)[2]
+        users =  output.split()
         return users
     else:
         return None
 
 
-def get_acl(path):
+def single_get_acl(path):
     command="get-acl \"{}\" | fl".format(path)
     _cmd= run(command)
     if _cmd.returncode == 0 :
@@ -48,14 +49,57 @@ def get_acl(path):
     else :
         return to_string_form(_cmd.stdout)
 
+def get_subfolder(path):
+    command="Get-ChildItem \"{}\" -dir -name".format(path)
+    _cmd= run(command)
+    if _cmd.returncode == 0 :
+        output = to_string_form(_cmd.stdout).split("\n")[:-1]
+        if len(output):
+            output[0] = output[0][2:]
+        return output 
+    else :
+        print (to_string_form(_cmd.stdout))
+        return []
 
-def set_acl(path , user , acl_type ):
+def sub_folders_pathes(path , dep_num):
+    pathes =[ [path] , [] , [] ]
+    
+    for x in range(dep_num-1):
+        for _path in pathes[x]:
+            Dsubfolders = get_subfolder(_path)
+            for subfolder in Dsubfolders :
+                pathes[x+1].append(_path + "/" + subfolder)
+
+    result = pathes[0] + pathes[1] + pathes[2]
+    
+    return result
+
+
+
+def get_acl(path , dep_num):
+    results= dict()
+    all_folders = sub_folders_pathes(path, dep_num)
+    for _path in all_folders:
+        results [_path] = single_get_acl(_path)
+    f = open("PermissionOutput.txt", "w")
+    for folder , result in  results.items() :
+        f.write(folder + "\n\n" + result + "\n*************************\n")
+    f.close()
+    return "see \"PermissionOutput.txt\" file"
+    
+
+
+
+
+def set_acl(inheritance , path , user , acl_type ):
     command=[   "$acl = Get-Acl \"{}\"".format(path),
                 "$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"ContainerInherit,ObjectInherit\",\"None\",\"Allow\")".format(user , acl_type),
                 "$acl.SetAccessRule($AccessRule)",
                 "$acl | Set-Acl \"{}\"".format(path)
     
     ]
+    if not inheritance :
+        command[1]="$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"Allow\")".format(user , acl_type)
     _cmd= run_multiple(command)
     out, err = _cmd.communicate()
     if _cmd.returncode == 0 :
@@ -64,13 +108,15 @@ def set_acl(path , user , acl_type ):
         return to_string_form(out)
 
 
-def remove_acl(path , user , acl_type ):
+def remove_acl(inheritance , path , user , acl_type ):
     command=[   "$acl = Get-Acl \"{}\"".format(path),
                 "$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"ContainerInherit,ObjectInherit\",\"None\",\"Allow\")".format(user , acl_type),
                 "$acl.RemoveAccessRule($AccessRule)",
                 "$acl | Set-Acl \"{}\"".format(path)
     
     ]
+    if not inheritance :
+        command[1]="$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(\"{}\",\"{}\",\"Allow\")".format(user , acl_type)
     _cmd= run_multiple(command)
     out, err = _cmd.communicate()
     if _cmd.returncode == 0 :
